@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Recommendation Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 25px;
+            font-size: 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .job {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            background-color: #fafafa;
+        }
+
+        .job h3 {
+            margin: 0;
+            color: #007bff;
+        }
+
+        .job p {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Job Recommendation System</h1>
+
+    <p>Paste your resume text below and click the button to get job recommendations.</p>
+
+    <textarea id="resume" placeholder="Paste your resume here..."></textarea>
+
+    <br>
+    <button onclick="getRecommendations()">Get Recommendations</button>
+
+    <div class="results" id="results"></div>
+</div>
+
+<script>
+    async function getRecommendations() {
+        const resumeText = document.getElementById("resume").value.trim();
+        const resultsDiv = document.getElementById("results");
+
+        if (!resumeText) {
+            alert("Please paste your resume text first.");
+            return;
+        }
+
+        resultsDiv.innerHTML = "<p>Loading recommendations...</p>";
+
+        try {
+            const response = await fetch("http://localhost:8083/recommendations", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain"
+                },
+                body: resumeText
+            });
+
+            if (!response.ok) {
+                throw new Error("Server error: " + response.status);
+            }
+
+            const jobs = await response.json();
+
+            if (jobs.length === 0) {
+                resultsDiv.innerHTML = "<p>No matching jobs found.</p>";
+                return;
+            }
+
+            resultsDiv.innerHTML = "";
+
+            jobs.forEach(job => {
+                const jobDiv = document.createElement("div");
+                jobDiv.className = "job";
+                jobDiv.innerHTML = `
+                    <h3>${job.title}</h3>
+                    <p><strong>Company:</strong> ${job.company}</p>
+                    <p><strong>Skills:</strong> ${job.skills}</p>
+                    <p><strong>Description:</strong> ${job.description || "N/A"}</p>
+                `;
+                resultsDiv.appendChild(jobDiv);
+            });
+
+        } catch (error) {
+            resultsDiv.innerHTML = "<p style='color:red;'>Error: " + error.message + "</p>";
+        }
+    }
+</script>
+
+</body>
+</html>

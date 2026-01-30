@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Job Portal</title>
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">
+    <i class="fa-solid fa-briefcase"></i> AI Job Portal
+  </div>
+  <button class="logout-btn" onclick="logout()">
+    <i class="fa-solid fa-right-from-bracket"></i> Logout
+  </button>
+</div>
+
+<!-- LOGIN -->
+<div id="loginPage" class="page active">
+  <div class="card auth-card">
+    <h2><i class="fa-solid fa-user-lock"></i> Login</h2>
+    <input id="loginUser" placeholder="Username" />
+    <input id="loginPass" type="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <p class="link" onclick="showRegister()">New user? Register</p>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="registerPage" class="page">
+  <div class="card auth-card">
+    <button class="back-btn" onclick="showLogin()">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+
+    <h2><i class="fa-solid fa-user-plus"></i> Register</h2>
+
+    <input id="regUser" placeholder="Username" />
+    <input id="regPass" type="password" placeholder="Password" />
+
+    <select id="regRole">
+      <option value="">Select Role</option>
+      <option value="USER">Job Seeker</option>
+      <option value="ADMIN">Job Poster (Admin)</option>
+    </select>
+
+    <button onclick="register()">Register</button>
+  </div>
+</div>
+
+<!-- ROLE PAGE -->
+<div id="rolePage" class="page">
+  <div class="card role-card">
+    <button class="back-btn" onclick="showLogin()">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+
+    <h2>Select Dashboard</h2>
+
+    <button class="primary" onclick="openSeeker()">
+      <i class="fa-solid fa-magnifying-glass"></i> Job Seeker
+    </button>
+
+    <button class="primary" onclick="openPoster()">
+      <i class="fa-solid fa-user-tie"></i> Job Poster
+    </button>
+  </div>
+</div>
+
+<!-- JOB SEEKER -->
+<div id="seekerPage" class="page wide">
+  <div class="dashboard-top">
+    <button class="back-btn" onclick="show('rolePage')">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <div class="dashboard-header">
+      <i class="fa-solid fa-briefcase"></i>
+      <h2>Job Seeker Dashboard</h2>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Search Jobs by Skill</h3>
+    <input id="searchSkill" placeholder="e.g. java, python" />
+    <button onclick="searchJobs()">Search</button>
+  </div>
+
+  <div class="card">
+    <h3>Search Results</h3>
+    <div id="searchResults" class="job-grid"></div>
+  </div>
+
+  <div class="card">
+    <h3>Upload Resume</h3>
+    <input type="file" id="resumeFile" />
+    <button onclick="uploadResume()">Get Recommendations</button>
+  </div>
+
+  <div class="card">
+    <h3>Recommended Jobs</h3>
+    <div id="recommendedJobs" class="job-grid"></div>
+  </div>
+
+  <div class="card">
+    <h3>Latest Jobs</h3>
+    <div id="latestJobs" class="job-grid"></div>
+  </div>
+</div>
+
+<!-- JOB POSTER -->
+<div id="posterPage" class="page wide">
+  <div class="dashboard-top">
+    <button class="back-btn" onclick="show('rolePage')">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <div class="dashboard-header">
+      <i class="fa-solid fa-user-tie"></i>
+      <h2>Job Poster Dashboard</h2>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Post Job</h3>
+
+    <input id="jobTitle" placeholder="Job Title" />
+    <input id="jobCompany" placeholder="Company" />
+
+    <!-- ✅ ADDED (REQUIRED) -->
+    <input id="jobLocation" placeholder="Location" />
+    <select id="jobType">
+      <option value="">Select Job Type</option>
+      <option value="Full-time">Full-time</option>
+      <option value="Part-time">Part-time</option>
+      <option value="Contract">Contract</option>
+    </select>
+
+    <input id="jobSkills" placeholder="Skills" />
+    <input id="jobExp" placeholder="Experience" />
+    <textarea id="jobDesc" placeholder="Job Description"></textarea>
+
+    <button onclick="postJob()">Post Job</button>
+  </div>
+
+  <div class="card">
+    <h3>Latest Jobs</h3>
+    <div id="posterJobs" class="job-grid"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="jobModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">×</span>
+    <h3 id="modalTitle"></h3>
+    <p><b>Company:</b> <span id="modalCompany"></span></p>
+    <p><b>Skills:</b> <span id="modalSkills"></span></p>
+    <p><b>Experience:</b> <span id="modalExp"></span></p>
+    <p><b>Description:</b> <span id="modalDesc"></span></p>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
